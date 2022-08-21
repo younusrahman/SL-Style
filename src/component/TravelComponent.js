@@ -9,13 +9,14 @@ import { Button, Stack, Typography } from '@mui/material'
 import CustomRadioGroups from 'component/SmallComponent/CuntomRadioGroups';
 import CollapseFilter from 'component/SmallComponent/Filtering/CollapseFilter';
 import CustomButton from 'component/SmallComponent/CustomButton';
-import { TravelPlannerDeparts } from './SLUrls';
+import { SLTravelPlanner } from './SLUrls';
 import ShowResultComponent from './ShowResultComponent';
 import { SetFailed, SetLoading} from 'reduxItem/slice/CommonSlice'
+import moment from 'moment';
 export default function TravelComponent() {
 
   const dispatch = useDispatch();
-  const {SearchResult, FromObject, ToObject} = useSelector(state => state.Travel)
+  const {SearchResult, FromObject, ToObject, Time} = useSelector(state => state.Travel)
   const { Loading, HasErrors, ErrorDetails} = useSelector(state => state.Common)
 
  const [searchTextFrom, setsearchTextFrom] = useState("")
@@ -24,10 +25,13 @@ export default function TravelComponent() {
  const GotResult = SearchResult;
 
 
-
+ const [allValues, setAllValues] = useState({
+    separateDate:  "",
+    separateTime: ""
+ });
 
  const handelSwapeInputs = ()=>{
-  console.log(typeof(SearchResult))
+    // console.log(Time.Time.toString().substring(11,16))
   const preValue = searchTextFrom;
   setsearchTextFrom (SearchTextTo);
   setsearchTextTo (preValue)
@@ -38,17 +42,41 @@ export default function TravelComponent() {
  const test = {}
 const handelSearchClick = () =>{
     // console.log(Object.keys(test).length === 0)
-    if (FromObject === "" || ToObject == "") { 
-        
-        return false;}
+
+
+    if (FromObject === "" || ToObject == "") return false;
+
+
+
 
  async function fetchData() {
-    dispatch(SetLoading(true))
- 
+    dispatch(SetLoading(false))
+
     try {
-                
+
+
+
+
+        // if(Object.keys(Time).length != 0){
+        //     setAllValues({...allValues, separateDate: Time.Time.toString().substring(0, 10)})
+        // setAllValues({...allValues, separateTime: Time.Time.toString().substring(11,16)})
+
+        // }
+        setAllValues({...allValues, separateDate: "Time.Time.toString().substring(0, 10)"})
+        // setAllValues({...allValues, separateTime: "Time.Time.toString().substring(11,16)"})
+
+        const UserSelectedAnyTime = Object.keys(Time).length != 0 
+        const separateDate =  UserSelectedAnyTime ?  Time.Time.toString().substring(0, 10) : 0
+        const separateTime = UserSelectedAnyTime ?  Time.Time.toString().substring(11,16) : 0
+
+        
+
+  
         const response = await fetch(
-          TravelPlannerDeparts(FromObject.SiteId, ToObject.SiteId)
+            
+            UserSelectedAnyTime ?             
+            SLTravelPlanner(FromObject.SiteId, ToObject.SiteId, separateDate, separateTime, Time.ValueNr):
+            SLTravelPlanner(FromObject.SiteId, ToObject.SiteId)
         );
 
         const data = await response.json()

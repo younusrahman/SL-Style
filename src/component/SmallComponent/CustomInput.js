@@ -77,7 +77,7 @@ function CustomInput({ placeholder, name, width="100%",variant, singelObject, se
                         autoComplete= 'off'
                         name={name}
                         variant={variant}
-                        sx={{ backgroundColor: "white", width: "100vw" }}
+                        sx={{ backgroundColor: "white", width: "100vw", position:"relative"}}
                         style={{ width: "100%" }}
                         type="text"
                         label={placeholder}
@@ -89,12 +89,13 @@ function CustomInput({ placeholder, name, width="100%",variant, singelObject, se
                                     aria-label="toggle password visibility"
                                     onClick={clearInput}
                                     edge="end">
-                                    {searchText == "" ? "" : <CloseIcon />}
+                                    
                                 </IconButton>
                             </InputAdornment>
                         }
 
                     />
+                 {searchText === ""? "" : <CloseIcon sx={{position:"absolute", color:"red", right:"2%", top:"30%", cursor:"pointer" }} onClick={clearInput}/> }    
 
                 </FormControl>
      

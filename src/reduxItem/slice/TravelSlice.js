@@ -68,7 +68,21 @@ const initialState = {
         const preObj = state.FromObject
         state.FromObject= state.ToObject;
         state.ToObject = preObj;     
+      },
+
+      SetTravelTime:(state, {payload}) => {
+        if(payload.selectedRadioButton == "0") {state.Time ={}; return;}
+
+        state.Time = {
+          Time : payload.datetime,
+          ValueNr : payload.selectedRadioButton,
+        }
+
+        
+
       }
+
+
     }
   });
   
@@ -76,6 +90,6 @@ const initialState = {
 
 
 
-  export const { SetSeachResult, SetFromObject,SetToObject,SetTransportMode, SetTransportChange, SetTravelVia, SwapObjects} = TravelSlice.actions
+  export const { SetSeachResult, SetFromObject,SetToObject,SetTransportMode, SetTransportChange, SetTravelVia, SwapObjects, SetTravelTime} = TravelSlice.actions
   export default TravelSlice.reducer;
   
